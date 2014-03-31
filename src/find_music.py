@@ -1,8 +1,11 @@
 from  requests import request
 from fuzzywuzzy import process
 from bs4 import BeautifulSoup as Soup
+from re import findall
+from re import split as Split
 class find_music():
     names = []
+    site_url = "http://www.tunefind.com"
     def __init__(self,name,type):
         self.url = "http://www.tunefind.com/browse/"
         self.name = name
@@ -57,6 +60,26 @@ class find_music():
     def get_episodes(self,season_name):
         return self.__get_episodes_dict(season_name).keys()
 
+    def getMusicdict(self,season_name,episode_name):
+        url = self.site_url + self.__get_episodes_dict(season_name)[episode_name]
+        req = request('GET',url)
+        soap = Soup(req.text)
+        episodes = []
+        for body in soap.find_all('div',{'class':"media-body"}):
+            for k in body.find_all('a',{'class':"tf-popup tf-song-link"}):
+                temp  = Split(r'\s{2}',body.getText().encode('ascii','ignore').replace('\n','').lstrip(' '))
+                episode_str = ''
+                cnt = 0
+                for l in temp:
+                    if l != '':
+                        episode_str = episode_str + " " + l
+                        cnt = cnt + 1
+                    if cnt > 1:
+                        break
+                episodes.append(episode_str)
+        return episodes
+
+
     def get_OriginalName(self):
         return self.__fuzzy_match__()
 
@@ -65,6 +88,5 @@ class find_music():
 t = find_music(name='breakingBAD',type='tv')
 #print t.get_OriginalName()
 #print t.get_seasons()
-p1 =  t.get_episodes('Season 2')
-print p1
-#op =['4. Discovery', '5. Break Point', '13. Zane Vs. Zane', '16. War', '11. Blind-Sided', '9. Asterisk', '15. Normandy', '7. Sucker Punch', '3. Meet the New Boss', '10. High Noon', '2. The Choice', '8. Rewind', "14. He's Back", '12. Blood in the Water', '6. All In', '1. She Knows']
+#p1 =  t.get_episodes('Season 2')
+print t.getMusicdict(season_name='Season 2',episode_name='4. Discovery')
