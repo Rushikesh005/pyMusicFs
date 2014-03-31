@@ -38,9 +38,23 @@ class find_music():
                 seasons.append(names.string.encode('ascii','ignore'))
         return seasons
 
+    def get_episodes(self):
+#        seasons = self.get_seasons()
+        url = "http://www.tunefind.com/show/suits/season-3"
+        req = request('GET',url)
+        episode_names = []
+        soap = Soup(req.text)
+        for body in soap.find_all('ul',{'class':"list-group"}):
+            for episode_body in body.find_all('li',{'class':'list-group-item'}):
+                episode_names.append(episode_body.find('a').string.encode('ascii','ignore').replace('\n','').strip(' '))
+        return episode_names
+
+
     def get_OriginalName(self):
         return self.__fuzzy_match__()
 
+
 t = find_music(name='breakingBAD',type='tv')
-print t.get_OriginalName()
-print t.get_seasons()
+#print t.get_OriginalName()
+#print t.get_seasons()
+print t.get_episodes()
