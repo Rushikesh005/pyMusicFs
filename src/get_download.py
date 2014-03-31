@@ -1,10 +1,15 @@
 from urllib2 import urlopen
 import sys
+from requests import get
+from requests import post
+import time
+from re import findall
+from bs4 import BeautifulSoup as Soup
 class get_download():
     def __init__(self):
         pass
-    def download(self,raw_url):
-        file_name = raw_url.split('/')[-1]
+    def download(self,raw_url,name):
+        file_name = name
         url = raw_url.replace(' ','%20')
         u = urlopen(url)
         f = open(file_name, 'wb')
@@ -27,6 +32,50 @@ class get_download():
             status = status + chr(8)*(len(status)+1)
             sys.stdout.write('\r'+status)
         f.close()
+
     def download_list(self,dwn_list):
         for url in dwn_list:
             self.download(url)
+
+    def search_youtube_link(self,name):
+        req = get("http://www.youtube.com/results?", params={"search_query": "%s" % (name)})
+        soup = Soup(req.text)
+        links = []
+        for body in soup.find_all('ol',{'id':"search-results"}):
+            for k in body.find_all('a'):
+                links.append(k.get('href'))
+        return "https://www.youtube.com" + links[0]
+
+    def get_download_link(self,name):
+        youLink = self.search_youtube_link(name)
+        for i in xrange(2):
+            statusurl = None
+            r = post("http://www.listentoyoutube.com/cc/conversioncloud.php", data={"mediaurl": youLink, "client_urlmap": "none"})
+            try:
+                statusurl = eval(r.text)['statusurl'].replace('\\/', '/') + "&json"
+                break
+            except:
+                print eval(r.text)['error']
+                time.sleep(1)
+        while True:
+            if not statusurl:
+                raise Exception("")
+            try:
+                resp = eval(get(statusurl).text)
+                if 'downloadurl' in resp:
+                    downloadurl = resp['downloadurl'].replace('\\/', '/')
+                    return downloadurl
+                time.sleep(1)
+            except Exception:
+                pass
+        return ""
+
+    def donwload_by_name(self,name):
+        link = self.get_download_link(name)
+        print link
+        self.download(link,name)
+
+
+
+d = get_download()
+d.donwload_by_name('Rubberband Man by The Spinners')
