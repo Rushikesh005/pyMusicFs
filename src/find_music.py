@@ -22,9 +22,8 @@ class find_music():
             self.names.append(body.find('a').string.encode('ascii','ignore'))
         return self.names
 
-    def fuzzy_match(self,token_string):
+    def fuzzy_match(self):
         temp_names = self.get_List()
-        return process.extract(token_string,choices=temp_names,limit=1)
-
+        return process.extract(self.name,choices=temp_names,limit=1)
 t = find_music(name='suits',type='tv')
-print t.fuzzy_match('breaking_bad')
+print t.fuzzy_match()
