@@ -25,5 +25,6 @@ class find_music():
     def fuzzy_match(self):
         temp_names = self.get_List()
         return process.extract(self.name,choices=temp_names,limit=1)
-t = find_music(name='suits',type='tv')
+t = find_music(name='suits1',type='tv')
 print t.fuzzy_match()
+#op = [('Suits', 91)]
