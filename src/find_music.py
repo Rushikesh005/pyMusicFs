@@ -58,3 +58,4 @@ t = find_music(name='breakingBAD',type='tv')
 #print t.get_OriginalName()
 #print t.get_seasons()
 print t.get_episodes()
+#op = ['1. The Arrangement', '2. I Want You To Want Me', '3. Unfinished Business', '4. Conflict Of Interest', '5. Shadow Of A Doubt', '6. The Other Time', "7. She's Mine", '8. Endgame', '9. Bad Faith', '10. Stay', '11. Buried Secrets', "12. Yesterday's Gone", '13. Moot Point', '14. Heartburn']
