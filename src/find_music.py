@@ -8,7 +8,8 @@ class find_music():
     site_url = "http://www.tunefind.com"
     def __init__(self,name,type):
         self.url = "http://www.tunefind.com/browse/"
-        self.name = name
+        self.tname = name.replace(" ","-")
+        self.name=name
         self.type = type
 
     def get_List(self):
@@ -42,12 +43,8 @@ class find_music():
         return seasons
 
     def __get_episodes_dict(self,season_name):
-        seasons = self.get_seasons()
-        if season_name in seasons:
-            season_name = season_name.replace(' ','-')
-        else:
-            return {}
-        url = "http://www.tunefind.com/show/suits/" + season_name
+        season_name = season_name.replace(' ','-')
+        url = "http://www.tunefind.com/show/"+self.get_OriginalName().lower().replace(" ","-")+"/" + season_name
         req = request('GET',url)
         episodes = {}
 
@@ -86,7 +83,8 @@ class find_music():
 
 
 t = find_music(name='breakingBAD',type='tv')
-#print t.get_OriginalName()
-#print t.get_seasons()
-#p1 =  t.get_episodes('Season 2')
-print t.getMusicdict(season_name='Season 2',episode_name='4. Discovery')
+print t.get_OriginalName()
+print t.get_seasons()
+p1 =  t.get_episodes('Season 2')
+print p1
+print t.getMusicdict(season_name='Season 2',episode_name='9. 4 Days Out')
