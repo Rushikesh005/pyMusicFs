@@ -38,24 +38,33 @@ class find_music():
                 seasons.append(names.string.encode('ascii','ignore'))
         return seasons
 
-    def get_episodes(self):
-#        seasons = self.get_seasons()
-        url = "http://www.tunefind.com/show/suits/season-3"
+    def __get_episodes_dict(self,season_name):
+        seasons = self.get_seasons()
+        if season_name in seasons:
+            season_name = season_name.replace(' ','-')
+        else:
+            return {}
+        url = "http://www.tunefind.com/show/suits/" + season_name
         req = request('GET',url)
-        episode_names = []
+        episodes = {}
+
         soap = Soup(req.text)
         for body in soap.find_all('ul',{'class':"list-group"}):
             for episode_body in body.find_all('li',{'class':'list-group-item'}):
-                episode_names.append(episode_body.find('a').string.encode('ascii','ignore').replace('\n','').strip(' '))
-        return episode_names
+                episodes[episode_body.find('a').string.encode('ascii','ignore').replace('\n','').strip(' ')] = episode_body.find('a').get('href')
+        return episodes
 
+    def get_episodes(self,season_name):
+        return self.__get_episodes_dict(season_name).keys()
 
     def get_OriginalName(self):
         return self.__fuzzy_match__()
 
 
+
 t = find_music(name='breakingBAD',type='tv')
 #print t.get_OriginalName()
 #print t.get_seasons()
-print t.get_episodes()
-#op = ['1. The Arrangement', '2. I Want You To Want Me', '3. Unfinished Business', '4. Conflict Of Interest', '5. Shadow Of A Doubt', '6. The Other Time', "7. She's Mine", '8. Endgame', '9. Bad Faith', '10. Stay', '11. Buried Secrets', "12. Yesterday's Gone", '13. Moot Point', '14. Heartburn']
+p1 =  t.get_episodes('Season 2')
+print p1
+#op =['4. Discovery', '5. Break Point', '13. Zane Vs. Zane', '16. War', '11. Blind-Sided', '9. Asterisk', '15. Normandy', '7. Sucker Punch', '3. Meet the New Boss', '10. High Noon', '2. The Choice', '8. Rewind', "14. He's Back", '12. Blood in the Water', '6. All In', '1. She Knows']
