@@ -31,7 +31,7 @@ if not hasattr(fuse, '__version__'):
 fuse.fuse_python_api = (0, 2)
 import seekDonwload
 hello_path = '/home/shreyas/prodrive_feb2/local/mta'
-config = ["suits/all","breakingbad/Season 2","breakingbad/Season 3","howImetyourmother/Season 8"]
+config = ["suits/all","trudetectvie/all"]
 table={}
 for everyItem in config:
     series,season=everyItem.split("/")
@@ -75,27 +75,35 @@ class HelloFS(Fuse):
         return st
 
     def readdir(self, path, offset):
+        logging.info("called 0")
         if path=="/":
+            logging.info(" called"+str(path))
             self.dictionary=[i for i in table.keys()]
         elif path.count("/")==1:
+            logging.info(" called"+str(path))
             nameOfSeries=path.split("/")[-1]
-            seriesObject=find_music.find_music(nameOfSeries,"tv")
+            self.seriesObject=find_music.find_music(nameOfSeries,"tv")
             if table[nameOfSeries]==["all"]:
-                self.dictionary=seriesObject.get_seasons()
+                self.dictionary=self.seriesObject.get_seasons()
             else:
                 self.dictionary=[]
-                validList=seriesObject.get_seasons()
+                validList=self.seriesObject.get_seasons()
                 for currentSeason in table[nameOfSeries]:
                     if currentSeason in validList:
                         self.dictionary.append(currentSeason)
         elif path.count("/")==2:
+            logging.info(" called"+str(path))
             empty,nameOfSeries,currentSeason=path.split("/")
-            seriesObject=find_music.find_music(nameOfSeries,"tv")
-            self.dictionary=seriesObject.get_episodes(currentSeason)
+            #seriesObject=find_music.find_music(nameOfSeries,"tv")
+            self.dictionary=self.seriesObject.get_episodes(currentSeason)
         elif path.count("/")==3:
+            logging.info(" called"+str(path))
             empty,nameOfSeries,currentSeason,currentEpisode=path.split("/")
-            seriesObject=find_music.find_music(nameOfSeries,"tv")
-            self.dictionary=seriesObject.getMusicdict(currentSeason,currentEpisode)
+            logging.info("called 1")
+            #seriesObject=find_music.find_music(nameOfSeries,"tv")
+            logging.info("called 2")
+            self.dictionary=self.seriesObject.getMusicdict(currentSeason,currentEpisode)
+            logging.info("called 3")
         for r in ['.','..']+self.dictionary:
                 yield fuse.Direntry(r)
 
