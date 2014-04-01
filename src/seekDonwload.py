@@ -24,8 +24,9 @@ class HttpFile(object):
         data = f.read()
         # FIXME: should check that we got the range expected, etc.
         chunk = len(data)
+        print chunk, count
         if count >= 0:
-            assert chunk == count
+            assert chunk <= count
         self.offset += chunk
         return data
 
@@ -41,7 +42,7 @@ class HttpFile(object):
 
     def tell(self):
         return self.offset
-h = HttpFile("http://srv71.listentoyoutube.com/download/4pSZb3BlnGRkr6yq3JqUtGpjoWhnZG5tn5rfhKKj3Jeih6iR1djXrZuV/")
-print(h.size())
-print(h.seek(0,0))
-print(h.tell())
+#h = HttpFile("http://srv71.listentoyoutube.com/download/4pSZb3BlnGRkr6yq3JqUtGpjoWhnZG5tn5rfhKKj3Jeih6iR1djXrZuV/")
+#print(h.size())
+#print(h.seek(0,0))
+#print(h.tell())

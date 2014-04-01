@@ -7,6 +7,8 @@
 #
 
 import os, stat, errno, find_music
+import logging
+logging.basicConfig(filename='example.log',level=logging.DEBUG,filemode='w')
 # pull in some spaghetti to make this stuff work without fuse-py being installed
 try:
     import _find_fuse_parts
@@ -14,14 +16,19 @@ except ImportError:
     pass
 import fuse
 from fuse import Fuse
-
+import seekDonwload
+import urllib2
+import io
+hdr = {'User-Agent':'Mozilla/5.0','Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'}
+req=urllib2.Request("http://www.textfiles.com/100/ad.txt",headers=hdr)
+u=urllib2.urlopen(req)
 
 if not hasattr(fuse, '__version__'):
     raise RuntimeError, \
         "your fuse-py doesn't know of fuse.__version__, probably it's too old."
 
 fuse.fuse_python_api = (0, 2)
-
+import seekDonwload
 hello_path = '/home/shreyas/prodrive_feb2/local/mta'
 config = ["suits/all","breakingbad/Season 2","breakingbad/Season 3"]
 table={}
@@ -56,11 +63,14 @@ class HelloFS(Fuse):
             st.st_mode = stat.S_IFDIR | 0755
             st.st_nlink = 2
         elif path.count("/")<=3:
-            st.st_mode = stat.S_IFDIR | 0755
-            st.st_nlink = 2
+           st.st_mode=stat.S_IFREG | 0755
+           st.st_nlink = 2
+           st.st_size=14227762
         elif path.count("/")==4:
-            st.st_mode=stat.S_IFREG | 0755
+            '''st.st_mode=stat.S_IFREG | 0755
             st.st_nlink = 2
+            st.st_size=36845'''
+            st=os.stat("/home/shreyas/Pictures/all-help.tec.txt")
         else:
             return -errno.ENOENT
         return st
@@ -90,25 +100,24 @@ class HelloFS(Fuse):
         for r in ['.','..']+self.dictionary:
                 yield fuse.Direntry(r)
 
-    '''def open(self, path, flags):
-        if path != hello_path:
-            return -errno.ENOENT
-        accmode = os.O_RDONLY | os.O_WRONLY | os.O_RDWR
-        if (flags & accmode) != os.O_RDONLY:
-            return -errno.EACCES
+    def open(self, path, flags):
+        logging.info("open called")
+        self.h = seekDonwload.HttpFile("http://srv60.listentoyoutube.com/download/4pSZb3BlnGRkr6yq3JmTtGpjoWhnaWxwmZXfhKKj3Jeih6iR1djXrZuV/")
+        logging.info("open completed")
 
     def read(self, path, size, offset):
-        if path != hello_path:
-            return -errno.ENOENT
-        slen = len(hello_str)
-        if offset < slen:
-            if offset + size > slen:
-                size = slen - offset
-            buf = hello_str[offset:offset+size]
-        else:
-            buf = ''
-        return buf'''
+        logging.info("read called size,offset "+str(size)+" "+str(offset))
+        self.h.seek(offset,whence=0)
+        return self.h.read(size)
+        #logging.info("read completed")
 
+    def truncate(self,path,size):
+        return 0
+
+    def release(self,path,flags):
+        x=""
+        self.h=""
+        return 0
 def main():
     usage="""
 Userspace hello example
