@@ -3,14 +3,17 @@ from fuzzywuzzy import process
 from bs4 import BeautifulSoup as Soup
 from re import findall
 from re import split as Split
+import logging
 class find_music():
     names = []
     site_url = "http://www.tunefind.com"
+    original_name = ""
     def __init__(self,name,type):
         self.url = "http://www.tunefind.com/browse/"
         self.tname = name.replace(" ","-")
         self.name=name
         self.type = type
+        self.__fuzzy_match__()
 
     def get_List(self):
         if self.type == "tv":
@@ -28,10 +31,10 @@ class find_music():
 
     def __fuzzy_match__(self):
         temp_names = self.get_List()
-        return process.extract(self.name,choices=temp_names,limit=1)[0][0]
+        self.original_name =  process.extract(self.name,choices=temp_names,limit=1)[0][0]
 
     def get_seasons(self):
-        url = "http://www.tunefind.com/show/" + self.__fuzzy_match__()
+        url = "http://www.tunefind.com/show/" + self.original_name
 #        url = "http://www.tunefind.com/show/suits"
         req = request('GET',url)
         seasons=[]
@@ -78,10 +81,10 @@ class find_music():
 
 
     def get_OriginalName(self):
-        return self.__fuzzy_match__()
+        return self.original_name
 
 
-
+logging.basicConfig(filename="log1.txt",level=logging.DEBUG,filemode="w")
 t = find_music(name='breakingBAD',type='tv')
 print t.get_OriginalName()
 print t.get_seasons()
