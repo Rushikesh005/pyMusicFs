@@ -8,6 +8,7 @@ class find_music():
     names = []
     site_url = "http://www.tunefind.com"
     original_name = ""
+    use_name = ""
     def __init__(self,name,type):
         self.url = "http://www.tunefind.com/browse/"
         self.tname = name.replace(" ","-")
@@ -34,7 +35,9 @@ class find_music():
         self.original_name =  process.extract(self.name,choices=temp_names,limit=1)[0][0]
 
     def get_seasons(self):
-        url = "http://www.tunefind.com/show/" + self.original_name
+        self.use_name = self.original_name.replace(' ','-')
+
+        url = "http://www.tunefind.com/show/" + self.use_name
 #        url = "http://www.tunefind.com/show/suits"
         req = request('GET',url)
         seasons=[]
