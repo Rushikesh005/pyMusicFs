@@ -35,7 +35,7 @@ class find_music():
         self.original_name =  process.extract(self.name,choices=temp_names,limit=1)[0][0]
 
     def get_seasons(self):
-        self.use_name = self.original_name.replace(' ','-')
+        self.use_name = self.original_name.replace(' ','-').lower()
 
         url = "http://www.tunefind.com/show/" + self.use_name
 #        url = "http://www.tunefind.com/show/suits"
@@ -49,7 +49,7 @@ class find_music():
         return seasons
 
     def __get_episodes_dict(self,season_name):
-        season_name = season_name.replace(' ','-')
+        season_name = season_name.replace(' ','-').lower()
         url = "http://www.tunefind.com/show/"+self.get_OriginalName().lower().replace(" ","-")+"/" + season_name
         req = request('GET',url)
         episodes = {}
