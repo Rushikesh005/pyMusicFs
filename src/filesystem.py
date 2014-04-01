@@ -31,7 +31,7 @@ if not hasattr(fuse, '__version__'):
 fuse.fuse_python_api = (0, 2)
 import seekDonwload
 hello_path = '/home/shreyas/prodrive_feb2/local/mta'
-config = ["suits/all","trudetectvie/all"]
+config = ["suits/all","trudetectvie/all","lost/all","sherlockbbc/all","breakingbad/all","friends/all"]
 table={}
 for everyItem in config:
     series,season=everyItem.split("/")
