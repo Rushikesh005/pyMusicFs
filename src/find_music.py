@@ -64,13 +64,13 @@ class find_music():
         for body in soap.find_all('ul',{'class':"list-group"}):
             for episode_body in body.find_all('li',{'class':'list-group-item'}):
                 episodes[episode_body.find('a').string.encode('ascii','ignore').replace('\n','').strip(' ')] = episode_body.find('a').get('href')
-        self.episodes_dict[season_name] = episodes
+        self.episodes_dict = episodes
         return episodes
 
     def get_episodes(self,season_name):
         return self.__get_episodes_dict(season_name).keys()
 
-    def getMusicdict(self,episode_name):
+    def getMusicdict(self,season_name,episode_name):
         url = self.site_url + self.episodes_dict[episode_name]
         req = request('GET',url)
         soap = Soup(req.text)
@@ -100,4 +100,4 @@ print t.get_OriginalName()
 print t.get_seasons()
 p1 =  t.get_episodes('Season 3')
 print p1
-print t.getMusicdict(episode_name='7. One Minute')
+print t.getMusicdict(season_name='Season 3',episode_name='7. One Minute')
