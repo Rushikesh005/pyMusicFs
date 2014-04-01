@@ -86,7 +86,7 @@ class find_music():
                         cnt = cnt + 1
                     if cnt > 1:
                         break
-                episodes.append(episode_str)
+                episodes.append(episode_str.lstrip(" "))
         return episodes
 
 
@@ -94,10 +94,11 @@ class find_music():
         return self.original_name
 
 
-logging.basicConfig(filename="log1.txt",level=logging.DEBUG,filemode="w")
-t = find_music(name='breakingBAD',type='tv')
+'''logging.basicConfig(filename="log1.txt",level=logging.DEBUG,filemode="w")
+t = find_music(name='howImetyourmother',type='tv')
 print t.get_OriginalName()
 print t.get_seasons()
-p1 =  t.get_episodes('Season 3')
+p1 =  t.get_episodes('Season 8')
 print p1
-print t.getMusicdict(season_name='Season 3',episode_name='7. One Minute')
+print t.getMusicdict(season_name='Season 3',episode_name='1. Farhampton')
+'''
