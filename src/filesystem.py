@@ -17,6 +17,7 @@ except ImportError:
 import fuse
 from fuse import Fuse
 import seekDonwload
+from get_download import get_download
 import urllib2
 import io
 hdr = {'User-Agent':'Mozilla/5.0','Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'}
@@ -30,7 +31,7 @@ if not hasattr(fuse, '__version__'):
 fuse.fuse_python_api = (0, 2)
 import seekDonwload
 hello_path = '/home/shreyas/prodrive_feb2/local/mta'
-config = ["suits/all","breakingbad/Season 2","breakingbad/Season 3"]
+config = ["suits/all","breakingbad/Season 2","breakingbad/Season 3","howImetyourmother/Season 8"]
 table={}
 for everyItem in config:
     series,season=everyItem.split("/")
@@ -63,14 +64,12 @@ class HelloFS(Fuse):
             st.st_mode = stat.S_IFDIR | 0755
             st.st_nlink = 2
         elif path.count("/")<=3:
-           st.st_mode=stat.S_IFREG | 0755
+           st.st_mode=stat.S_IFDIR | 0755
            st.st_nlink = 2
-           st.st_size=14227762
         elif path.count("/")==4:
-            '''st.st_mode=stat.S_IFREG | 0755
+            st.st_mode=stat.S_IFREG | 0755
             st.st_nlink = 2
-            st.st_size=36845'''
-            st=os.stat("/home/shreyas/Pictures/all-help.tec.txt")
+            #link,st.st_size=get_download().donwload_by_name(path.split("/")[-1])
         else:
             return -errno.ENOENT
         return st
@@ -102,7 +101,8 @@ class HelloFS(Fuse):
 
     def open(self, path, flags):
         logging.info("open called")
-        self.h = seekDonwload.HttpFile("http://srv60.listentoyoutube.com/download/4pSZb3BlnGRkr6yq3JmTtGpjoWhnaWxwmZXfhKKj3Jeih6iR1djXrZuV/")
+        #link,size=get_download().donwload_by_name(path.split("/")[-1])
+        #self.h = seekDonwload.HttpFile(link)
         logging.info("open completed")
 
     def read(self, path, size, offset):
