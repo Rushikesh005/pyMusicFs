@@ -72,10 +72,10 @@ class get_download():
 
     def donwload_by_name(self,name):
         link = self.get_download_link(name)
-        print link
-        self.download(link,name)
+        size = int(urlopen(link).info().getheaders("Content-Length")[0])
+        return link,size
+        #self.download(link,name)
 
 
-
-d = get_download()
-d.donwload_by_name('Rubberband Man by The Spinners')
+#d = get_download()
+#print get_download().donwload_by_name('Rubberband Man by The Spinners')
