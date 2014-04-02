@@ -5,7 +5,8 @@ from requests import post
 import time
 from re import findall
 from bs4 import BeautifulSoup as Soup
-class get_download():
+import pafy
+class AudioHandler:
     def __init__(self):
         pass
     def download(self,raw_url,name):
@@ -46,6 +47,14 @@ class get_download():
                 links.append(k.get('href'))
         return "https://www.youtube.com" + links[0]
 
+    def getAudioStream(self,name):
+        videoLink=self.search_youtube_link(name)
+        video = pafy.new(videoLink)
+        audiostreams = video.audiostreams
+        for k in audiostreams:
+            print(k.bitrate)
+        return audiostreams[0].url,audiostreams[0].get_filesize()
+
     def get_download_link(self,name):
         youLink = self.search_youtube_link(name)
         for i in xrange(2):
@@ -70,12 +79,6 @@ class get_download():
                 pass
         return ""
 
-    def donwload_by_name(self,name):
-        link = self.get_download_link(name)
-        size = int(urlopen(link).info().getheaders("Content-Length")[0])
-        return link,size
-        #self.download(link,name)
 
-
-#d = get_download()
-#print get_download().donwload_by_name('Rubberband Man by The Spinners')
+d = AudioHandler()
+print d.getAudioStream('Rubberband Man by The Spinners')
