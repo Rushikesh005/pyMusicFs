@@ -16,14 +16,10 @@ except ImportError:
     pass
 import fuse
 from fuse import Fuse
-import seekDonwload
-from get_download import AudioHandler
-import urllib2
-import io
-hdr = {'User-Agent':'Mozilla/5.0','Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'}
-req=urllib2.Request("http://www.textfiles.com/100/ad.txt",headers=hdr)
-u=urllib2.urlopen(req)
 
+from get_download import AudioHandler
+
+metaInfo={}
 if not hasattr(fuse, '__version__'):
     raise RuntimeError, \
         "your fuse-py doesn't know of fuse.__version__, probably it's too old."
@@ -31,7 +27,7 @@ if not hasattr(fuse, '__version__'):
 fuse.fuse_python_api = (0, 2)
 import seekDonwload
 hello_path = '/home/shreyas/prodrive_feb2/local/mta'
-config = ["suits/all","trudetectvie/all","lost/all","sherlockbbc/all","breakingbad/all","friends/all"]
+config = ["suits/all","trudetectvie/all","lost/Season 3","sherlockbbc/all","breakingbad/all","friends/all"]
 table={}
 for everyItem in config:
     series,season=everyItem.split("/")
@@ -55,9 +51,14 @@ class MyStat(fuse.Stat):
         self.st_atime = 0
         self.st_mtime = 0
         self.st_ctime = 0
-
 class HelloFS(Fuse):
+    def __init__(self,*args,**kw):
+        self.metaInfo={}
+        Fuse.__init__(self,version="%prog " + fuse.__version__,
+                     usage=args[0],
+                     dash_s_do='setsingle')
     def getattr(self, path):
+        logging.info("getattr called "+str(path))
         print "path=",path
         st = MyStat()
         if path == '/':
@@ -69,11 +70,19 @@ class HelloFS(Fuse):
         elif path.count("/")==4:
             st.st_mode=stat.S_IFREG | 0755
             st.st_nlink = 2
-            try:
+            '''try:
+                logging.info("before")
+                global metaInfo
                 link,st.st_size=self.metaInfo[path.split("/")[-1]]
+                logging,info("after")
             except:
-                link,st.st_size=AudioHandler.getAudioStream(path.split("/")[-1])
+                logging.info("in except 1")
+                link,st.st_size=AudioHandler().getAudioStream(path.split("/")[-1])
+                logging.info("in except 2")
+                global metaInfo
                 self.metaInfo[path.split("/")[-1]]=(link,st.st_size)
+                logging.info("in except 3")
+            '''
         else:
             return -errno.ENOENT
         return st
@@ -134,10 +143,8 @@ def main():
     usage="""
 Userspace hello example
 """ + Fuse.fusage
-    server = HelloFS(version="%prog " + fuse.__version__,
-                     usage=usage,
-                     dash_s_do='setsingle')
-    print table
+    server = HelloFS(usage)
+    #print table
     server.parse(errex=1)
     server.main()
 
