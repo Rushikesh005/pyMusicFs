@@ -83,4 +83,4 @@ class AudioHandler:
 
 
 #d = AudioHandler()
-#print d.getAudioStream('Rubberband Man by The Spinners')
+#print AudioHandler().getAudioStream('Rubberband Man by The Spinners')
