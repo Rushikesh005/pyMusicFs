@@ -42,9 +42,11 @@ class AudioHandler:
         req = get("http://www.youtube.com/results?", params={"search_query": "%s" % (name)})
         soup = Soup(req.text)
         links = []
-        for body in soup.find_all('ol',{'id':"search-results"}):
-            for k in body.find_all('a'):
-                links.append(k.get('href'))
+        #for body in soup.find_all('ol',{'id':"search-results"}):
+        body=soup.find('ol',{'id':"search-results"})
+        #for k in body.find_all('a'):
+        k=body.a
+        links.append(k.get('href'))
         return "https://www.youtube.com" + links[0]
 
     def getAudioStream(self,name):
@@ -80,5 +82,5 @@ class AudioHandler:
         return ""
 
 
-d = AudioHandler()
-print d.getAudioStream('Rubberband Man by The Spinners')
+#d = AudioHandler()
+#print d.getAudioStream('Rubberband Man by The Spinners')
