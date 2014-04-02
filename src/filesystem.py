@@ -69,7 +69,7 @@ class HelloFS(Fuse):
         elif path.count("/")==4:
             st.st_mode=stat.S_IFREG | 0755
             st.st_nlink = 2
-            #link,st.st_size=get_download().donwload_by_name(path.split("/")[-1])
+            link,st.st_size=get_download().donwload_by_name(path.split("/")[-1])
         else:
             return -errno.ENOENT
         return st
