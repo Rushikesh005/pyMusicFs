@@ -17,7 +17,7 @@ except ImportError:
 import fuse
 from fuse import Fuse
 import seekDonwload
-from get_download import get_download
+from get_download import AudioHandler
 import urllib2
 import io
 hdr = {'User-Agent':'Mozilla/5.0','Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'}
@@ -69,7 +69,11 @@ class HelloFS(Fuse):
         elif path.count("/")==4:
             st.st_mode=stat.S_IFREG | 0755
             st.st_nlink = 2
-            link,st.st_size=get_download().donwload_by_name(path.split("/")[-1])
+            try:
+                link,st.st_size=self.metaInfo[path.split("/")[-1]]
+            except:
+                link,st.st_size=AudioHandler.getAudioStream(path.split("/")[-1])
+                self.metaInfo[path.split("/")[-1]]=(link,st.st_size)
         else:
             return -errno.ENOENT
         return st
