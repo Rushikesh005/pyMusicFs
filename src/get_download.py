@@ -42,13 +42,12 @@ class AudioHandler:
         req = get("http://www.youtube.com/results?", params={"search_query": "%s" % (name)})
         soup = Soup(req.text)
         links = []
-        #for body in soup.find_all('ol',{'id':"search-results"}):
         body=soup.find('ol',{'id':"search-results"})
-        #for k in body.find_all('a'):
         k=body.a
         links.append(k.get('href'))
         return "https://www.youtube.com" + links[0]
 
+    @staticmethod
     def getAudioStream(self,name):
         videoLink=self.search_youtube_link(name)
         video = pafy.new(videoLink)
@@ -56,30 +55,6 @@ class AudioHandler:
         for k in audiostreams:
             print(k.bitrate)
         return audiostreams[0].url,audiostreams[0].get_filesize()
-
-    def get_download_link(self,name):
-        youLink = self.search_youtube_link(name)
-        for i in xrange(2):
-            statusurl = None
-            r = post("http://www.listentoyoutube.com/cc/conversioncloud.php", data={"mediaurl": youLink, "client_urlmap": "none"})
-            try:
-                statusurl = eval(r.text)['statusurl'].replace('\\/', '/') + "&json"
-                break
-            except:
-                print eval(r.text)['error']
-                time.sleep(1)
-        while True:
-            if not statusurl:
-                raise Exception("")
-            try:
-                resp = eval(get(statusurl).text)
-                if 'downloadurl' in resp:
-                    downloadurl = resp['downloadurl'].replace('\\/', '/')
-                    return downloadurl
-                time.sleep(1)
-            except Exception:
-                pass
-        return ""
 
 
 #d = AudioHandler()
