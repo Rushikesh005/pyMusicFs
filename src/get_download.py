@@ -1,9 +1,6 @@
 from urllib2 import urlopen
 import sys
 from requests import get
-from requests import post
-import time
-from re import findall
 from bs4 import BeautifulSoup as Soup
 import pafy
 class AudioHandler:

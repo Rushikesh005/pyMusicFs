@@ -76,7 +76,7 @@ class find_music():
 #for specified episode name return music of that episode #note season needs to be the same for that instance.
     def getMusicdict(self,season_name,episode_name):
         url = self.site_url + self.episodes_dict[episode_name]
-        req = request('GET',url)
+        req = self.s.get(url)
         soap = Soup(req.text)
         episodes = []
         for body in soap.find_all('div',{'class':"media-body"}):
