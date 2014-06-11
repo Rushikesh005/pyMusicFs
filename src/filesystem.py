@@ -1,11 +1,5 @@
 #!/usr/bin/env python
 
-#
-#
-#    This program can be distributed under the terms of the GNU LGPL.
-#    See the file COPYING.
-#
-
 import os, stat, errno, find_music
 import logging
 logging.basicConfig(filename='example.log',level=logging.DEBUG,filemode='w')
@@ -26,7 +20,7 @@ if not hasattr(fuse, '__version__'):
 
 fuse.fuse_python_api = (0, 2)
 import seekDonwload
-hello_path = '/home/shreyas/prodrive_feb2/local/mta'
+
 config = ["suits/all","trudetectvie/all","lost/Season 3","sherlockbbc/all","breakingbad/all","friends/all"]
 table={}
 for everyItem in config:
@@ -38,7 +32,7 @@ for everyItem in config:
     else:
         table[series].append(season)
 
-#dictionary=os.listdir(hello_path)
+
 class MyStat(fuse.Stat):
     def __init__(self):
         self.st_mode = 0
