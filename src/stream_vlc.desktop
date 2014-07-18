@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=stream_vlc
+Comment=This is my comment
+Exec=/usr/share/pyMusicFs/src/script.py
+Icon=/usr/share/pyMusicFs/icons/stream_vlc.icon
+Path=/usr/share/pyMusicFs/
+Terminal=False
+Type=Application
+Categories=Application;

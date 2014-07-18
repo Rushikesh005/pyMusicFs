@@ -13,7 +13,6 @@ from fuse import Fuse
 
 from get_download import AudioHandler
 
-metaInfo={}
 if not hasattr(fuse, '__version__'):
     raise RuntimeError, \
         "your fuse-py doesn't know of fuse.__version__, probably it's too old."
@@ -31,8 +30,6 @@ for everyItem in config:
         table[series]=[season]
     else:
         table[series].append(season)
-
-
 class MyStat(fuse.Stat):
     def __init__(self):
         self.st_mode = 0

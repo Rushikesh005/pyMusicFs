@@ -96,7 +96,6 @@ class find_music():
 #drive method to return correct_name for tv show ----fuzzy_search
     def get_OriginalName(self):
         return self.original_name
-
 '''
 # demo driver program
 logging.basicConfig(filename="logs.txt",level=logging.DEBUG,filemode="w") #created a logger in debug mode.

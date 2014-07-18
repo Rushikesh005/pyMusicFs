@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os,sys
 import subprocess
 import get_download

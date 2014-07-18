@@ -1,0 +1,6 @@
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): www.tunefind.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET / HTTP/1.1" 200 None
+DEBUG:requests.packages.urllib3.connectionpool:"GET /browse/tv HTTP/1.1" 200 None
+DEBUG:requests.packages.urllib3.connectionpool:"GET /show/how-i-met-your-mother HTTP/1.1" 200 None
+DEBUG:requests.packages.urllib3.connectionpool:"GET /show/how-i-met-your-mother/season-8 HTTP/1.1" 200 None
+DEBUG:requests.packages.urllib3.connectionpool:"GET /show/how-i-met-your-mother/season-8/12402 HTTP/1.1" 200 None
