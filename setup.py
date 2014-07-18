@@ -27,6 +27,15 @@ if not cache['python-pip'].is_installed:
 else:
     print "python-pip requirement is already satisfied"
 
+if not cache['vlc'].is_installed:
+    pip_commands = ["sudo apt-get install vlc"]
+    for command in pip_commands:    
+        p=subprocess.Popen(command,shell=True,stdout=subprocess.PIPE)
+        p.wait()
+else:
+    print "VLC requirement is already satisfied"
+
+
 import pip
 installed_packages = pip.get_installed_distributions()
 installed_packages_list = sorted(["%s" % (i.key)
