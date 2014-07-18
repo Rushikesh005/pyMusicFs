@@ -39,20 +39,25 @@ class AudioHandler:
         req = get("http://www.youtube.com/results?", params={"search_query": "%s" % (name)})
         soup = Soup(req.text)
         links = []
-        body=soup.find('ol',{'id':"search-results"})
+                
+        body=soup.find('ol',{'class':"section-list"})
+        #print body
         k=body.a
+        #print k
         links.append(k.get('href'))
+        #print links[0]
         return "https://www.youtube.com" + links[0]
 
-    @staticmethod
+    
     def getAudioStream(self,name):
         videoLink=self.search_youtube_link(name)
         video = pafy.new(videoLink)
+        
         audiostreams = video.audiostreams
-        for k in audiostreams:
-            print(k.bitrate)
+      #  for k in audiostreams:
+      #      print(k.bitrate)
         return audiostreams[0].url,audiostreams[0].get_filesize()
 
 
 #d = AudioHandler()
-#print AudioHandler().getAudioStream('Rubberband Man by The Spinners')
+#print AudioHandler().getAudioStream('rushikesh')
